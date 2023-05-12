@@ -43,11 +43,11 @@ class Card:
 
   def val(self):
     if self.num.isdigit():
-      return int(self.num)
+      return [int(self.num),int(self.num)]
     elif self.num == "Ace":
-      return 11
+      return [1,11]
     else:
-      return 10
+      return [10,10]
 
 
 class Player:
@@ -55,13 +55,19 @@ class Player:
   def __init__(self, name):
     self.name = name
 
+  def chooser(self, card):
+    if (card[0]==card[1]):
+      return card[0]
+    else:
+      return card[0]
+    
   def init(self, card1, card2):
     self.hands = [0, 0]
     if card1 == card2:
-      self.hands[0] += int(card1.val())
-      self.hands[1] += int(card2.val())
+      self.hands[0] += int(self.chooser(card1.val()))
+      self.hands[1] += int(self.chooser(card2.val()))
     else:
-      self.hands[0] += int(card1.val()) + int(card2.val())
+      self.hands[0] += int(self.chooser(card1.val())) + int(self.chooser(card2.val()))
 
   def __str__(self):
     return self.name + " " + str(self.hands)
@@ -69,7 +75,7 @@ class Player:
   def play(self, deck):
     for x in range(len(self.hands) - 1):
       if (self.hands[x] <= 16):
-        self.hands[x] += int(deck.draw().val())
+        self.hands[x] += int(self.chooser(deck.draw().val())) 
         print("Hit")
       else:
         print("Stand")
@@ -101,14 +107,3 @@ class Game:
 
 d = Game([Player("p1"), Player("p2")])
 d.turn()
-
-# d = Deck()
-# d.create_deck()
-# print(d)
-# print(d.draw())
-
-# p1 = Player(d.draw(), d.draw(), "Test1")
-# dealer = Dealer(d.draw(), d.draw())
-
-# p1.play(d)
-# dealer.play(d)
