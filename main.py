@@ -44,14 +44,17 @@ class Card:
   def val(self):
     if self.num.isdigit():
       return int(self.num)
+    elif self.num=="Ace":
+      return 11
     else:
       return 10
 
 
 
 class Player:
-  def __init__(self, card1, card2, name):
+  def __init__(self, name):
     self.name = name
+  def init(self, card1, card2):
     self.hands = [0,0]
     if card1 == card2:
       self.hands[0] += int(card1.val())
@@ -67,25 +70,28 @@ class Player:
         print("Hit")
       print("Stand")
 
-
-class Dealer:
-  def __init__(self, ps):
-    self.players = []
-    self.numplay = ps
+class Game:
+  def __init__(self, p):
+    # DOESN'T INCLUDE "DEALER" WHICH IS AUTO GENERATED
+    self.players = p
     self.deck = Deck()
     self.deck.create_deck()
     print(self.deck)
-    for i in range(self.numplay):
+    for i in range(len(self.players)):
       card1 = self.deck.draw()
       card2 = self.deck.draw()
-      self.players.append(Player(card1, card2, str(i)))
+      self.players[i].init(card1, card2)
+    self.players.insert(0,Player("DEALER"))
+    dcard1 = self.deck.draw()
+    dcard2 = self.deck.draw()
+    self.players[0].init(dcard1, dcard2)
 
   def turn(self):
-    for i in range(len(self.players)-1):
+    for i in range(len(self.players)):
       self.players[i].play(self.deck)
       print(self.players[i])
 
-d = Dealer(2)
+d = Game([Player("p1"),Player("p2")])
 d.turn()
 
 # d = Deck()
