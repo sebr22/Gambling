@@ -40,37 +40,43 @@ class Card:
 
   def __eq__(self, other):
     return self.num == other.num
-    
+
   def val(self):
     if self.num.isdigit():
       return int(self.num)
-    elif self.num=="Ace":
+    elif self.num == "Ace":
       return 11
     else:
       return 10
 
 
-
 class Player:
+
   def __init__(self, name):
     self.name = name
+
   def init(self, card1, card2):
-    self.hands = [0,0]
+    self.hands = [0, 0]
     if card1 == card2:
       self.hands[0] += int(card1.val())
       self.hands[1] += int(card2.val())
     else:
       self.hands[0] += int(card1.val()) + int(card2.val())
+
   def __str__(self):
-    return self.name+" "+str(self.hands)
+    return self.name + " " + str(self.hands)
+
   def play(self, deck):
     for x in range(len(self.hands) - 1):
       if (self.hands[x] <= 16):
         self.hands[x] += int(deck.draw().val())
         print("Hit")
-      print("Stand")
+      else:
+        print("Stand")
+
 
 class Game:
+
   def __init__(self, p):
     # DOESN'T INCLUDE "DEALER" WHICH IS AUTO GENERATED
     self.players = p
@@ -81,7 +87,7 @@ class Game:
       card1 = self.deck.draw()
       card2 = self.deck.draw()
       self.players[i].init(card1, card2)
-    self.players.insert(0,Player("DEALER"))
+    self.players.insert(0, Player("DEALER"))
     dcard1 = self.deck.draw()
     dcard2 = self.deck.draw()
     self.players[0].init(dcard1, dcard2)
@@ -90,8 +96,10 @@ class Game:
     for i in range(len(self.players)):
       self.players[i].play(self.deck)
       print(self.players[i])
+      print("\n")
 
-d = Game([Player("p1"),Player("p2")])
+
+d = Game([Player("p1"), Player("p2")])
 d.turn()
 
 # d = Deck()
