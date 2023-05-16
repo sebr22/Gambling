@@ -1,6 +1,9 @@
 import random
 # add another import for other player classes
 from players import Player
+from players import BasicStrategyPlayer
+from players import CardCounter
+from players import RandomPlayer
 
 class Deck:
     def __init__(self):
@@ -75,7 +78,7 @@ class Dealer:
 deck = Deck()
 deck.create_deck()
 
-players = [Player("p1"), Player("p2")]
+players = [Player("Player"), BasicStrategyPlayer("Basic"), CardCounter("Card Counter"), RandomPlayer("Rando")]
 dealer = Dealer(deck)
 for p in range(len(players)):
     players[p].init(deck.draw(), deck.draw())
