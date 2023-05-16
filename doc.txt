@@ -1,0 +1,70 @@
+def round(self):
+    #Runs a full game of turns. Returns the winner. Can be looped for the simulation
+    self.count = 0
+    self.highScore = 0
+    self.winner = None
+    for i in range(len(self.players)):
+      for j in range(self.players[i].len(self.players.getAmount())):
+        if(self.players[i].getAmount()[j] > 21 or self.players[i].getStand() == True): 
+          #Syntax error - don't know why
+          self.count+=1
+
+    if(self.count == self.players[i].len(self.players.getAmount())-1):
+      print("End of Round:\n")
+      for i in range(len(self.players)):
+        for j in range(self.players[i].len(self.players.getAmount())):
+          if(self.players[i].getAmount() > self.highScore):
+            #Need to add that the dealer wins ties - maybe at the end before it print and returns it runs a check
+            self.highScore = self.players[j].getAmount()
+            winner = self.players[j]
+
+#Dealer check
+      
+      print((self.winner.getName()) + " won the round")
+      return winner
+    else:
+      for i in range(len(self.players)):
+        self.players[i].play(deck)
+
+
+
+
+
+
+
+
+
+
+class Game:
+
+	def __init__(self, p):
+		# DOESN'T INCLUDE "DEALER" WHICH IS AUTO GENERATED
+		self.players = p
+		self.deck = Deck()
+		self.deck.create_deck()
+		print(self.deck)
+		#self.bustPlayers = []
+		#Tracks which players have busted/stood to know when to end the round
+		#WORK IN PROGRESS
+		for i in range(len(self.players)):
+			card1 = self.deck.draw()
+			card2 = self.deck.draw()
+			#self.bustPlayers[i] = false
+			self.players[i].init(card1, card2)
+		self.players.insert(0, Player("DEALER"))
+		#self.bustPlayers.insert(0, false)
+		dcard1 = self.deck.draw()
+		dcard2 = self.deck.draw()
+		self.players[0].init(dcard1, dcard2)
+
+	def turn(self):
+		for i in range(len(self.players)):
+			self.players[i].play(self.deck, self.dealer)
+			print(self.players[i])
+			print("\n")
+
+
+#NEEDS DEBUGGING + FINISHING TOUCHES - Should return the player that won
+
+d = Game([Player("p1"), Player("p2")])
+d.turn()
