@@ -56,30 +56,30 @@ class RandomPlayer(Player):
 
 
 class BasicStrategyPlayer(Player):
-    def play(self, deck, dealer):
-        dealer_upcard = int(self.chooser(dealer.up.val()))
-        for x in range(len(self.hands)):
-            while self.hands[x] <= 16:
-                if dealer_upcard in [2, 3]:
-                    if self.hands[x] >= 13:
-                        break
-                elif dealer_upcard in [4, 5, 6]:
-                    if self.hands[x] >= 12:
-                        break
-                elif dealer_upcard == 7 or dealer_upcard == 8:
-                    if self.hands[x] >= 17:
-                        break
-                else:
-                    if self.hands[x] >= 18:
-                        break
-                print(self.name + " Hit " + str(self.hands[x]))
-                self.hands[x] += int(self.chooser(deck.draw().val()))
-            if self.hands[x] > 21:
-                print(self.name + " Bust " + str(self.hands[x]))
-            else:
-                print(self.name + " Stand " + str(self.hands[x]))
-                self.stand = True
 
+  def play(self, deck, dealer):
+    dealer_upcard = int(self.chooser(dealer.up.val()))
+    for x in range(len(self.hands)):
+      while self.hands[x] <= 16:
+        if dealer_upcard in [2, 3]:
+          if self.hands[x] >= 13:
+            break
+        elif dealer_upcard in [4, 5, 6]:
+          if self.hands[x] >= 12:
+            break
+        elif dealer_upcard == 7 or dealer_upcard == 8:
+          if self.hands[x] >= 17:
+            break
+        else:
+          if self.hands[x] >= 18:
+            break
+        print(self.name + " Hit " + str(self.hands[x]))
+        self.hands[x] += int(self.chooser(deck.draw().val()))
+      if self.hands[x] > 21:
+        print(self.name + " Bust " + str(self.hands[x]))
+      else:
+        print(self.name + " Stand " + str(self.hands[x]))
+        self.stand = True
 
 
 class CardCounter(Player):

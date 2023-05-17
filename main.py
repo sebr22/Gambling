@@ -1,5 +1,4 @@
 import random
-# add another import for other player classes
 from players import Player
 from players import BasicStrategyPlayer
 from players import CardCounter
@@ -80,14 +79,36 @@ deck.create_deck()
 
 players = [Player("Player"), BasicStrategyPlayer("Basic"), CardCounter("Card Counter"), RandomPlayer("Rando")]
 dealer = Dealer(deck)
+
+# ---------------------------------------------------------------------------------------------
+# Update count for all players when dealer's up card is revealed (right now only the card counter uses that)
 for p in range(len(players)):
-    players[p].init(deck.draw(), deck.draw())
+    if isinstance(players[p], CardCounter):
+      players[p].update_count(dealer.up)
+
+for p in range(len(players)):
+    card1 = deck.draw()
+    card2 = deck.draw()
+    
+    # Update count for all players when player's initial cards are dealt
+    if isinstance(players[p], CardCounter):
+      players[p].update_count(card1)
+      players[p].update_count(card2)
+    
+    players[p].init(card1, card2)
+
+# ---------------------------------------------------------------------------------------------
 
 for p in range(len(players)):
     players[p].play(deck, dealer)
     print("\n")
 dealer.play()
+print("\n")
+for p in players:
+  print(p.name+" gets "+str(p.hands[0])+"pts and dealer gets "+str(dealer.count)+" pts")
+
+print("\n")
 
 for p in players:
-    if p.hands[0] > dealer.count and p.hands[0] <= 21:
-        print(p.name + " beats the dealer")
+  if ((p.hands[0]>dealer.count) or (dealer.count>21)) and (p.hands[0]<=21):
+    print(p.name + " beat the dealer with a count of " + str(p.hands[0]))
