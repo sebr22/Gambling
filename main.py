@@ -74,41 +74,84 @@ class Dealer:
             self.stand = True
 
 
-deck = Deck()
-deck.create_deck()
+class Tournament:
+    def __init__(self, players, rounds):
+        self.players = players
+        self.rounds = rounds
+        self.win_rates = {player.name: 0 for player in players}
+
+    def play_round(self):
+      deck = Deck()
+      deck.create_deck()
+
+      dealer = Dealer(deck)
+
+      # Update count for all players when dealer's up card is revealed
+      for p in range(len(self.players)):
+          if isinstance(self.players[p], CardCounter):
+            self.players[p].update_count(dealer.up)
+
+      for p in range(len(self.players)):
+          card1 = deck.draw()
+          card2 = deck.draw()
+
+          # Update count for all players when player's initial cards are dealt
+          if isinstance(self.players[p], CardCounter):
+            self.players[p].update_count(card1)
+            self.players[p].update_count(card2)
+
+          # Allow player to make a bet
+          bet = min(100, self.players[p].chips)
+          self.players[p].bet(bet)
+
+          # Initialize player's hand
+          self.players[p].init(card1, card2)
+
+      for p in range(len(self.players)):
+          # Allow player to play their hand
+          self.players[p].play(deck, dealer)
+          print("\n")
+
+      # Allow dealer to play their hand
+      dealer.play()
+      print("\n")
+
+      # Determine outcome of round for each player
+      for p in range(len(self.players)):
+          if ((self.players[p].hands[0] > dealer.count) or (dealer.count > 21)) and (self.players[p].hands[0] <= 21):
+              print(self.players[p].name + " beat the dealer with a count of " + str(self.players[p].hands[0]))
+              # Player wins and receives double their bet
+              winnings = 2 * self.players[p].current_bet
+              self.players[p].chips += winnings
+
+              # Update win rate for player
+              self.win_rates[self.players[p].name] += 1 / self.rounds
+          else:
+              print(self.players[p].name + " lost to the dealer with a count of " + str(self.players[p].hands[0]))
+              # Player loses and loses their bet
+              loss = -1 * self.players[p].current_bet
+              self.players[p].chips += loss
+
+    def play_tournament(self):
+      for round_num in range(1, self.rounds+1):
+          print(f"Round {round_num}")
+          print("--------")
+          
+          # Play a round of the tournament
+          self.play_round()
+
+      # Determine winner of tournament
+      max_chips = max([p.chips for p in self.players])
+      winner = next(p for p in self.players if p.chips == max_chips)
+      print(f"{winner.name} has won the tournament with {winner.chips} chips")
+
+    def display_win_rates(self):
+        print("\nWin Rates:")
+        for player_name, win_rate in self.win_rates.items():
+            print(f"{player_name}: {win_rate:.2f}")
+
 
 players = [Player("Player"), BasicStrategyPlayer("Basic"), CardCounter("Card Counter"), RandomPlayer("Rando")]
-dealer = Dealer(deck)
-
-# ---------------------------------------------------------------------------------------------
-# Update count for all players when dealer's up card is revealed (right now only the card counter uses that)
-for p in range(len(players)):
-    if isinstance(players[p], CardCounter):
-      players[p].update_count(dealer.up)
-
-for p in range(len(players)):
-    card1 = deck.draw()
-    card2 = deck.draw()
-    
-    # Update count for all players when player's initial cards are dealt
-    if isinstance(players[p], CardCounter):
-      players[p].update_count(card1)
-      players[p].update_count(card2)
-    
-    players[p].init(card1, card2)
-
-# ---------------------------------------------------------------------------------------------
-
-for p in range(len(players)):
-    players[p].play(deck, dealer)
-    print("\n")
-dealer.play()
-print("\n")
-for p in players:
-  print(p.name+" gets "+str(p.hands[0])+"pts and dealer gets "+str(dealer.count)+" pts")
-
-print("\n")
-
-for p in players:
-  if ((p.hands[0]>dealer.count) or (dealer.count>21)) and (p.hands[0]<=21):
-    print(p.name + " beat the dealer with a count of " + str(p.hands[0]))
+tournament = Tournament(players, 5)
+tournament.play_tournament()
+tournament.display_win_rates()
