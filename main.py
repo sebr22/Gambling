@@ -13,7 +13,8 @@ fp.close()
 
 with open(file, mode='a') as list:
     data = csv.writer(list)
-    data.writerow(["Dealer Up", "Drawn Cards", "Num of Hits", "Your End Total", "Dealer's Face Down", "Dealer Drawn Cards", "Dealer Num Hits", "Dealer End Total", "Did YOU Win"])
+    data.writerow(["Dealer_Up", "Drawn_Cards", "Num_of_Hits", "Did_YOU_Win"])
+
 
 
 class Deck:
@@ -166,7 +167,7 @@ class Tournament:
         self.players[p].chips += loss
       with open(file, mode='a') as list:
         data = csv.writer(list)
-        data.writerow([dealer.up, self.players[p].drawnatm, self.players[p].hits, self.players[p].hands[0], str(dealer.down), dealer.drawn, dealer.hits, dealer.count, self.win])
+        data.writerow([dealer.up, self.players[p].drawnatm, self.players[p].hits, (1 if self.win else 0)])
 
 
   def play_tournament(self):
