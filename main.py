@@ -14,7 +14,7 @@ fp.close()
 
 with open(file, mode='a') as list:
     data = csv.writer(list)
-    data.writerow(["Dealer_Up", "Drawn_Cards", "Num_of_Hits", "Seat_At_Table" "Did_YOU_Win"])
+    data.writerow(["Dealer_Up", "Drawn_Cards", "Num_of_Hits", "Seat_At_Table", "Did_YOU_Win"])
 
 
 
@@ -88,7 +88,7 @@ class Dealer:
     self.drawn = []
     self.hits = 0
 		# if verbose == 1:
-		# 	print( self.drawn, )
+		# 	print("Drawn :", self.drawn, "")
 
   def play(self):
     self.down = self.deck.draw()
