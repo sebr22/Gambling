@@ -6,14 +6,15 @@ from players import RandomPlayer
 from players import MITCardCounter
 import csv
 import glob
-
+#set verbose to either 1 or 0. 1 = verbose 0 = not verbose.
+verbose = 0
 file = "output/"+str(len(glob.glob('./output/*')))+".csv"
 fp = open(file, 'x')
 fp.close()
 
 with open(file, mode='a') as list:
     data = csv.writer(list)
-    data.writerow(["Dealer_Up", "Drawn_Cards", "Num_of_Hits", "Did_YOU_Win"])
+    data.writerow(["Dealer_Up", "Drawn_Cards", "Num_of_Hits", "Seat_At_Table" "Did_YOU_Win"])
 
 
 
@@ -86,6 +87,8 @@ class Dealer:
     self.count = self.aces(self.up.val())
     self.drawn = []
     self.hits = 0
+		# if verbose == 1:
+		# 	print( self.drawn, )
 
   def play(self):
     self.down = self.deck.draw()
@@ -112,7 +115,6 @@ class Tournament:
   def play_round(self):
     deck = Deck()
     deck.create_deck()
-
     dealer = Dealer(deck)
 
     # Update count for all players when dealer's up card is revealed
@@ -135,7 +137,7 @@ class Tournament:
 
       # Initialize player's hand
       self.players[p].init(card1, card2)
-
+			
     for p in range(len(self.players)):
       # Allow player to play their hand
       self.players[p].play(deck, dealer)
@@ -167,7 +169,7 @@ class Tournament:
         self.players[p].chips += loss
       with open(file, mode='a') as list:
         data = csv.writer(list)
-        data.writerow([dealer.up, self.players[p].drawnatm, self.players[p].hits, (1 if self.win else 0)])
+        data.writerow([dealer.up, self.players[p].drawnatm, self.players[p].hits, p, (1 if self.win else 0)])
 
 
   def play_tournament(self):
